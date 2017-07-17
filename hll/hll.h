@@ -11,6 +11,9 @@
 #include "hll_alpha.h"
 #include "murmur.h"
 
+#include <iostream>
+using namespace std;
+
 template <uint32_t PBITS>
 struct HLL {
     constexpr static uint32_t SIZE = 1<<PBITS;
@@ -49,13 +52,20 @@ uint64_t HLL<PBITS>::count() const {
     for(uint32_t i = 0; i < SIZE; ++i) sum += pow(2, -registers[i]);
     double estimate = ALPHA * SIZE * SIZE / sum;
 
-    if (estimate <= SIZE * 5 / 2) {
-        uint32_t zeros = 0;
-        for(uint32_t i = 0; i < SIZE; ++i) zeros += !registers[i];
-        if (zeros != 0) estimate = SIZE * log(SIZE / (double) zeros);
-    }
+    double corr_estimate = estimate < 5*SIZE ? HLLBiasEstimator<PBITS>::biasEstimate(estimate) : estimate;
 
-    return estimate;
+    uint32_t zeros = 0;
+    for(uint32_t i = 0; i < SIZE; ++i) zeros += !registers[i];
+
+    double lin_count_estimate = corr_estimate;
+
+    if(zeros != 0)
+        lin_count_estimate = SIZE * log(SIZE / (double) zeros);
+
+    if(lin_count_estimate < HLLThreshold<PBITS>::THRESHOLD)
+        return lin_count_estimate;
+    else
+        return corr_estimate;
 }
 
 template<uint32_t PBITS>
