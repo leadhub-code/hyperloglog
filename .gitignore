@@ -1,0 +1,15 @@
+.DS_Store
+.*.swp
+*.egg-info
+__pycache__
+.cache
+local
+*.xz
+tests/data/*/*.actual.yaml
+build
+dist
+venv
+*.cpython-*.so
+lh_data_structures/*.cpp
+
+
