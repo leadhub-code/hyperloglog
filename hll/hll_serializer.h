@@ -12,11 +12,11 @@ struct HLLSerializer {
     constexpr static uint32_t MAGIC_DENSE  = 0xa32fe12c;
     constexpr static uint32_t MIN_BUFFER_SIZE = (1<<PBITS)+12;
 
-    void serialize(const HLL<PBITS> & hll, uint8_t * data, uint32_t & len);
-    HLL<PBITS> deserialize(const uint8_t * data);
+    static void serialize(const HLL<PBITS> & hll, uint8_t * data, uint32_t & len);
+    static HLL<PBITS> deserialize(const uint8_t * data);
 
-// private:
-    void write_bits(uint8_t * &dest, uint8_t & bit_offset, uint8_t bits, uint32_t src) {
+private:
+    static void write_bits(uint8_t * &dest, uint8_t & bit_offset, uint8_t bits, uint32_t src) {
         while(bits>8-bit_offset) {
             *dest |= (src>>(bits-(8-bit_offset)))&((1<<(8-bit_offset))-1);
             dest++; bits -= 8-bit_offset; bit_offset = 0;
@@ -29,7 +29,7 @@ struct HLLSerializer {
         }
     }
 
-    uint32_t read_bits(const uint8_t * &src, uint8_t & bit_offset, uint8_t bits) {
+    static uint32_t read_bits(const uint8_t * &src, uint8_t & bit_offset, uint8_t bits) {
         uint32_t res = 0;
         while(bits>8-bit_offset) {
             res <<= 8; //-bit_offset;
