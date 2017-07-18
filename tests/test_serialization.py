@@ -5,7 +5,7 @@ sys.path.append('.')
 
 import uuid
 
-from pyhll import HLL, HLLSerializer
+from pyhllpp import HLL, HLLSerializer
 
 hll = HLL(666)
 
