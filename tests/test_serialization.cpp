@@ -2,6 +2,7 @@
 #include <bitset>
 #include <cstdio>
 #include <cassert>
+
 #include "../hll/hll_serializer.h"
 
 using namespace std;
@@ -21,7 +22,6 @@ void print_buff(const uint8_t * buff, int len){
     cout<<endl;
 }
 
-uint8_t data[8];
 
 template <int PBITS>
 void test() {
@@ -41,6 +41,7 @@ void test() {
         assert(hll == hll_d);
         assert(hll.seed == hll_d.seed);
 
+        uint8_t data[8];
         for(int z = 0; z < 8; ++z)
             data[z] = rand()%256;
 
