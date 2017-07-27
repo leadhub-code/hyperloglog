@@ -1,4 +1,4 @@
-python3=python3.6
+python3=python3
 venv_dir=local/venv
 
 src_dir=hll
@@ -25,8 +25,7 @@ $(venv_dir)/packages-installed: setup.py $(src_files) Makefile requirements.txt
 	$(venv_dir)/bin/python3 setup.py build_ext --inplace
 	touch $(venv_dir)/packages-installed
 
-
-check:
+check: $(venv_dir)/packages-installed
 	g++ -g -std=c++17 -O4 -Wall -Wextra  hll/murmur.cxx tests/test_serialization.cpp -o test_serialization && ./test_serialization
 	rm test_serialization
 	g++ -g -std=c++17 -O4 -Wall -Wextra  hll/murmur.cxx tests/test_count.cpp -o test_count && ./test_count

@@ -9,7 +9,7 @@ os.environ["CXX"] = "g++"
 extensions = [
     Extension(
         'pyhllpp',
-        glob('hll/**/*.pyx', recursive=True) + glob('hll/**/*.cxx', recursive=True),
+        glob('hll/*.pyx') + glob('hll/*.cxx'),
         language='c++',
         extra_compile_args=['-std=c++14', '-O4'],
     ),
