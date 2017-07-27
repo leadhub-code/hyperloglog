@@ -26,9 +26,9 @@ $(venv_dir)/packages-installed: setup.py $(src_files) Makefile requirements.txt
 	touch $(venv_dir)/packages-installed
 
 check: $(venv_dir)/packages-installed
-	g++ -g -std=c++17 -O4 -Wall -Wextra  hll/murmur.cxx tests/test_serialization.cpp -o test_serialization && ./test_serialization
+	g++ -g -std=c++14 -O4 -Wall -Wextra hll/*.cxx tests/test_serialization.cpp -o test_serialization && ./test_serialization
 	rm test_serialization
-	g++ -g -std=c++17 -O4 -Wall -Wextra  hll/murmur.cxx tests/test_count.cpp -o test_count && ./test_count
+	g++ -g -std=c++14 -O4 -Wall -Wextra hll/*.cxx tests/test_count.cpp -o test_count && ./test_count
 	rm test_count
 	$(venv_dir)/bin/python3 tests/test_serialization.py
 
