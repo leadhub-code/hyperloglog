@@ -33,9 +33,10 @@ void test() {
     double max_deviation = 0;
 
     for(int i = 0; i<100000; ++i) {
-        string data;
-        for(int z = 0; z < 10; ++z)
-            data+=rand()%10+'0';
+        string data(10, 'x');
+        for (unsigned z = 0; z < 10; ++z) {
+            data.at(z) = '0' + rand() % 10;
+        }
 
         hll.insert((const uint8_t *)data.c_str(), data.size());
         leset.insert(data);

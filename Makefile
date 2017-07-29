@@ -31,5 +31,6 @@ check: $(venv_dir)/packages-installed
 	g++ -g -std=c++14 -O4 -Wall -Wextra hll/*.cxx tests/test_count.cpp -o test_count && ./test_count
 	rm test_count
 	$(venv_dir)/bin/python3 tests/test_serialization.py
+	$(venv_dir)/bin/python3 tests/test_hll.py
 
 .PHONY: build check run mrproper
