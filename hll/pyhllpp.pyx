@@ -1,9 +1,7 @@
 from libc.stdint cimport uint8_t, uint32_t
 from libc.stdlib cimport malloc, free
-
-
 from cpython cimport array
-import array
+from cython.operator cimport dereference as deref
 
 from hll cimport HLL as c_HLL
 from hll_serializer cimport HLLSerializer as c_HLLSerializer
@@ -11,8 +9,8 @@ from hll_serializer cimport HLLSerializer as c_HLLSerializer
 cdef class HLL:
     cdef c_HLL * _c_hll
 
-    def __init__(self, uint32_t seed):
-        self._c_hll = new c_HLL(seed)
+    def __init__(self, uint32_t precision, uint32_t seed):
+        self._c_hll = new c_HLL(precision, seed)
 
     def __dealloc__(self):
         del self._c_hll
@@ -24,22 +22,22 @@ cdef class HLL:
         return self._c_hll.count()
 
     def merge(self, other):
-        self._c_hll.merge((<HLL>other)._c_hll[0])
+        self._c_hll.merge(deref((<HLL>other)._c_hll))
 
-    def __richcmp__(x,y,op):
-        if op == 2:
-            return (<HLL>x)._c_hll[0] == (<HLL>y)._c_hll[0]
-        else:
-            assert False
+    def equals(self, other):
+        return deref(self._c_hll) == deref((<HLL>other)._c_hll)
 
 cdef class HLLSerializer:
 
     @staticmethod
     def serialize(hll):
-        cdef uint8_t * buffer = <uint8_t*> malloc((1024+8)*sizeof(uint8_t))
+        cdef c_HLL * hll_ptr = (<HLL>hll)._c_hll
+        cdef uint32_t buffer_size = c_HLLSerializer.serialize_buffer_size(deref(hll_ptr))
+
+        cdef uint8_t * buffer = <uint8_t*> malloc(buffer_size)
         cdef uint32_t len = 0
 
-        c_HLLSerializer.serialize((<HLL>hll)._c_hll[0], <uint8_t*>buffer, len)
+        c_HLLSerializer.serialize(deref(hll_ptr), <uint8_t*>buffer, len)
 
         ba = bytearray()
         for i in range(len):
@@ -50,11 +48,11 @@ cdef class HLLSerializer:
         return bytes(ba)
 
     @staticmethod
-    def deserialize(data):
-        cdef uint8_t * buffer = <uint8_t*> malloc((1024+8)*sizeof(uint8_t))
+    def deserialize(pybuffer):
+        cdef uint8_t * buffer = <uint8_t*> malloc(len(pybuffer)*sizeof(uint8_t))
 
-        for i in range(len(data)):
-            buffer[i]=data[i]
+        for i in range(len(pybuffer)):
+            buffer[i]=pybuffer[i]
 
         HLL_obj = HLL.__new__(HLL)
         (<HLL>HLL_obj)._c_hll = new c_HLL(c_HLLSerializer.deserialize(<uint8_t*>buffer))

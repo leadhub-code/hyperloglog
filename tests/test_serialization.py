@@ -7,15 +7,19 @@ import uuid
 
 from pyhllpp import HLL, HLLSerializer
 
-hll = HLL(666)
+for prec in range(4, 15):
 
-for i in range(100000):
-    data = HLLSerializer.serialize(hll)
-    hll_d = HLLSerializer.deserialize(data)
+    hll = HLL(prec, 666)
 
-    if not hll == hll_d:
-        raise Exception("fail")
+    for i in range(50000):
+        data = HLLSerializer.serialize(hll)
+        hll_d = HLLSerializer.deserialize(data)
 
-    hll.insert(str(uuid.uuid4()))
+        if not hll.equals(hll_d):
+            raise Exception("fail")
+
+        hll.insert(str(uuid.uuid4()))
+
+    print("precision " + str(prec) + " OK")
 
 print("Python OK")

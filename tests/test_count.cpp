@@ -6,12 +6,12 @@
 #include "../hll/hll_serializer.h"
 
 using namespace std;
+using namespace hll;
 
 #define D(x) std::cout<<#x<<": "<<std::endl<<">>>  "<<x<<std::endl;
 
-template <uint32_t PBITS>
-void print(const HLL<PBITS> & hll) {
-    for(int i = 0; i < (1<<PBITS); ++i)
+void print(const HLL & hll) {
+    for(int i = 0; i < hll.size; ++i)
         if(hll.registers[i] != 0)
             cout<<i <<' '<<(int)hll.registers[i]<<endl;
 }
@@ -22,17 +22,16 @@ void print_buff(const uint8_t * buff, int len){
     cout<<endl;
 }
 
-template<int PBITS>
-void test() {
+void test(int precision) {
     srand(666);
-    cout<<"test: "<<PBITS<<endl;
+    cout<<"test: "<<precision<<endl;
 
-    HLL<PBITS> hll(0xdeadbeef);
+    HLL hll(precision, 0xdeadbeef);
     set<string> leset;
 
     double max_deviation = 0;
 
-    for(int i = 0; i<100000; ++i) {
+    for(int i = 0; i<50000; ++i) {
         string data;
         for(int z = 0; z < 10; ++z)
             data+=rand()%10+'0';
@@ -54,13 +53,8 @@ void test() {
 
 int main() {
 
-    test<4>();
-    test<6>();
-    test<8>();
-    test<10>();
-    test<12>();
-    // test<14>();
-    // test<16>();
+    for(int i = 4; i < 19; ++i)
+        test(i);
 
     return 0;
 }
