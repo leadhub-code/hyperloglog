@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <bitset>
 #include <cstdio>
 #include <cassert>
@@ -11,7 +12,7 @@ using namespace hll;
 #define D(x) std::cout<<#x<<": "<<std::endl<<">>>  "<<x<<std::endl;
 
 void print(const HLL & hll) {
-    for(int i = 0; i < hll.size; ++i)
+    for(unsigned i = 0; i < hll.size; ++i)
         if(hll.registers[i] != 0)
             cout<<i <<' '<<(int)hll.registers[i]<<endl;
 }
@@ -29,8 +30,8 @@ void test(int precision) {
     HLL hll(precision, 0xaaaaaaaa);
     HLL hll_d(precision, 0xaaaaaaaa);
 
-    cout<<"bits: "<< precision<<" => ";
-    for(int i = 0; i < 50000; ++i) {
+    cout << "bits: " << std::setw(2) << precision << " => ";
+    for(int i = 0; i < 5000; ++i) {
         uint32_t len;
         HLLSerializer::serialize(hll, buffer, len);
 

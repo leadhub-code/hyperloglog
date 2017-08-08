@@ -1,8 +1,10 @@
 #include <iostream>
+#include <iomanip>
 #include <bitset>
 #include <cstdio>
 #include <cassert>
 #include <set>
+
 #include "../hll/hll_serializer.h"
 
 using namespace std;
@@ -11,7 +13,7 @@ using namespace hll;
 #define D(x) std::cout<<#x<<": "<<std::endl<<">>>  "<<x<<std::endl;
 
 void print(const HLL & hll) {
-    for(int i = 0; i < hll.size; ++i)
+    for(unsigned i = 0; i < hll.size; ++i)
         if(hll.registers[i] != 0)
             cout<<i <<' '<<(int)hll.registers[i]<<endl;
 }
@@ -24,14 +26,14 @@ void print_buff(const uint8_t * buff, int len){
 
 void test(int precision) {
     srand(666);
-    cout<<"test: "<<precision<<endl;
+    cout << "test: " << std::setw(2) << precision << endl;
 
     HLL hll(precision, 0xdeadbeef);
     set<string> leset;
 
     double max_deviation = 0;
 
-    for(int i = 0; i<50000; ++i) {
+    for(int i = 0; i<5000; ++i) {
         string data;
         for(int z = 0; z < 10; ++z)
             data+=rand()%10+'0';
