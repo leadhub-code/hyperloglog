@@ -17,7 +17,7 @@ extensions = [
 
 setup(
     name='pyhllpp',
-    version='0.0.1',
+    version='0.0.2',
     author='Radovan Cerveny',
     author_email='songman@leadhub.co',
     packages=find_packages(exclude=['doc', 'tests']),
