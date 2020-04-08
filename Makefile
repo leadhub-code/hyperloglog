@@ -1,8 +1,8 @@
 python3=python3
 venv_dir=local/venv
 
-src_dir=hll
-src_files=$(shell find $(src_dir) -type f -name '*.cxx' -o -name '*.h' -o -name '*.pxd' -o -name '*.pyx')
+src_dir=pyhllpp
+src_files=$(shell find $(src_dir) -type f -name '*.cpp' -o -name '*.h' -o -name '*.pxd' -o -name '*.pyx')
 
 all: $(venv_dir)/packages-installed check
 
@@ -21,14 +21,14 @@ $(venv_dir)/packages-installed: setup.py $(src_files) Makefile requirements.txt
 	$(venv_dir)/bin/pip install -U pip wheel
 	$(venv_dir)/bin/pip install -r requirements.txt
 	$(venv_dir)/bin/pip install -U colorama
-	# $(venv_dir)/bin/pip install -e .
 	$(venv_dir)/bin/python3 setup.py build_ext --inplace
+	$(venv_dir)/bin/pip install -e .
 	touch $(venv_dir)/packages-installed
 
 check: $(venv_dir)/packages-installed
-	g++ -g -std=c++14 -O4 -Wall -Wextra hll/*.cxx tests/test_serialization.cpp -o test_serialization && ./test_serialization
+	g++ -g -std=c++14 -O4 -Wall -Wextra pyhllpp/cpp_src/*.cpp tests/test_serialization.cpp -o test_serialization && ./test_serialization
 	rm test_serialization
-	g++ -g -std=c++14 -O4 -Wall -Wextra hll/*.cxx tests/test_count.cpp -o test_count && ./test_count
+	g++ -g -std=c++14 -O4 -Wall -Wextra pyhllpp/cpp_src/*.cpp tests/test_count.cpp -o test_count && ./test_count
 	rm test_count
 	$(venv_dir)/bin/python3 tests/test_serialization.py
 

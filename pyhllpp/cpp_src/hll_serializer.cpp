@@ -1,14 +1,14 @@
 #include <cstring>
 #include <stdexcept>
-#include "hll_serializer.h"
+#include "hll_serializer.hpp"
 
 namespace hll {
 
-uint32_t HLLSerializer::serialize_buffer_size(const HLL & hll) {
-    return hll.size * sizeof(HLL::register_type) + sizeof(MAGIC_DENSE) + sizeof(hll.precision) + sizeof(hll.seed);
+uint32_t _HLLSerializer::serialize_buffer_size(const _HLL & hll) {
+    return hll.size * sizeof(_HLL::register_type) + sizeof(MAGIC_DENSE) + sizeof(hll.precision) + sizeof(hll.seed);
 }
 
-void HLLSerializer::serialize(const HLL & hll, uint8_t * data, uint32_t & len) {
+void _HLLSerializer::serialize(const _HLL & hll, uint8_t * data, uint32_t & len) {
     uint8_t * begin = data;
     const auto & hr = hll.registers;
 
@@ -51,15 +51,15 @@ void HLLSerializer::serialize(const HLL & hll, uint8_t * data, uint32_t & len) {
 }
 
 
-HLL HLLSerializer::deserialize(const uint8_t * data) {
+_HLL _HLLSerializer::deserialize(const uint8_t * data) {
     uint32_t magic = *(uint32_t*)data; data += 4;
     uint32_t precision = *(uint32_t*)data; data += 4;
     uint32_t seed = *(uint32_t*)data; data += 4;
 
     if(magic != MAGIC_SPARSE && magic != MAGIC_DENSE)
-        throw std::runtime_error("HLLSerializer: corrupted magic number");
+        throw std::runtime_error("_HLLSerializer: corrupted magic number");
 
-    HLL hll(precision, seed);
+    _HLL hll(precision, seed);
     auto & hr = hll.registers;
 
     if(magic == MAGIC_SPARSE) {
@@ -86,7 +86,7 @@ HLL HLLSerializer::deserialize(const uint8_t * data) {
     return hll;
 }
 
-void HLLSerializer::write_bits(uint8_t * & dest, uint8_t & bit_offset, uint8_t bits, uint32_t src)  {
+void _HLLSerializer::write_bits(uint8_t * & dest, uint8_t & bit_offset, uint8_t bits, uint32_t src)  {
     while(bits>8-bit_offset) {
         *dest |= (src>>(bits-(8-bit_offset)))&((1<<(8-bit_offset))-1);
         dest++; bits -= 8-bit_offset; bit_offset = 0;
@@ -99,7 +99,7 @@ void HLLSerializer::write_bits(uint8_t * & dest, uint8_t & bit_offset, uint8_t b
     }
 }
 
-uint32_t HLLSerializer::read_bits(const uint8_t * & src, uint8_t & bit_offset, uint8_t bits)  {
+uint32_t _HLLSerializer::read_bits(const uint8_t * & src, uint8_t & bit_offset, uint8_t bits)  {
     uint32_t res = 0;
     while(bits>8-bit_offset) {
         res <<= 8; //-bit_offset;

@@ -9,7 +9,7 @@ os.environ["CXX"] = "g++"
 extensions = [
     Extension(
         'pyhllpp',
-        glob('hll/*.pyx') + glob('hll/*.cxx'),
+        glob('pyhllpp/*.pyx'),
         language='c++',
         extra_compile_args=['-std=c++14', '-O4'],
     ),
@@ -17,10 +17,10 @@ extensions = [
 
 setup(
     name='pyhllpp',
-    version='0.0.2',
+    version='0.0.3',
     author='Radovan Cerveny',
     author_email='songman@leadhub.co',
     packages=find_packages(exclude=['doc', 'tests']),
     install_requires=[],
-    ext_modules=cythonize(extensions),
+    ext_modules=cythonize(extensions, compiler_directives={'language_level' : "3"}),
     )

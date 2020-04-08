@@ -1,8 +1,12 @@
+#ifndef _MURMUR_HPP
+#define _MURMUR_HPP
+
+#include <cstring>
+#include <cstdint>
+
 //-----------------------------------------------------------------------------
 // MurmurHash2, 64-bit versions, by Austin Appleby
 //-----------------------------------------------------------------------------
-
-#include "murmur.h"
 
 uint64_t MurmurHash64A ( const uint8_t * key, size_t len, uint32_t seed )
 {
@@ -46,3 +50,5 @@ uint64_t MurmurHash64A ( const uint8_t * key, size_t len, uint32_t seed )
 
     return h;
 }
+
+#endif

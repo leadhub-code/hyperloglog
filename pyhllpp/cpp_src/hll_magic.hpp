@@ -2,7 +2,8 @@
 // Values taken from apendix of: https://stefanheule.com/papers/edbt13-hyperloglog.pdf
 //------------------------------------------------------------------------------------
 
-#pragma once
+#ifndef _HLL_MAGIC_HPP
+#define _HLL_MAGIC_HPP
 
 #include <algorithm>
 #include <array>
@@ -20,3 +21,5 @@ struct HLLMagic {
 };
 
 }
+
+#endif

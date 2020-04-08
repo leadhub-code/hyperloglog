@@ -5,14 +5,14 @@
 #include <cassert>
 #include <set>
 
-#include "../hll/hll_serializer.h"
+#include "../pyhllpp/cpp_src/hll_serializer.hpp"
 
 using namespace std;
 using namespace hll;
 
 #define D(x) std::cout<<#x<<": "<<std::endl<<">>>  "<<x<<std::endl;
 
-void print(const HLL & hll) {
+void print(const _HLL & hll) {
     for(unsigned i = 0; i < hll.size; ++i)
         if(hll.registers[i] != 0)
             cout<<i <<' '<<(int)hll.registers[i]<<endl;
@@ -28,7 +28,7 @@ void test(int precision) {
     srand(666);
     cout << "test: " << std::setw(2) << precision << endl;
 
-    HLL hll(precision, 0xdeadbeef);
+    _HLL hll(precision, 0xdeadbeef);
     set<string> leset;
 
     double max_deviation = 0;

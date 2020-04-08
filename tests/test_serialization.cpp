@@ -4,14 +4,14 @@
 #include <cstdio>
 #include <cassert>
 
-#include "../hll/hll_serializer.h"
+#include "../pyhllpp/cpp_src/hll_serializer.hpp"
 
 using namespace std;
 using namespace hll;
 
 #define D(x) std::cout<<#x<<": "<<std::endl<<">>>  "<<x<<std::endl;
 
-void print(const HLL & hll) {
+void print(const _HLL & hll) {
     for(unsigned i = 0; i < hll.size; ++i)
         if(hll.registers[i] != 0)
             cout<<i <<' '<<(int)hll.registers[i]<<endl;
@@ -27,15 +27,15 @@ void test(int precision) {
     uint8_t * buffer = new uint8_t[1<<(precision+1)];
 
     srand(666);
-    HLL hll(precision, 0xaaaaaaaa);
-    HLL hll_d(precision, 0xaaaaaaaa);
+    _HLL hll(precision, 0xaaaaaaaa);
+    _HLL hll_d(precision, 0xaaaaaaaa);
 
     cout << "bits: " << std::setw(2) << precision << " => ";
     for(int i = 0; i < 5000; ++i) {
         uint32_t len;
-        HLLSerializer::serialize(hll, buffer, len);
+        _HLLSerializer::serialize(hll, buffer, len);
 
-        hll_d = HLLSerializer::deserialize(buffer);
+        hll_d = _HLLSerializer::deserialize(buffer);
 
         assert(hll == hll_d);
         assert(hll.seed == hll_d.seed);

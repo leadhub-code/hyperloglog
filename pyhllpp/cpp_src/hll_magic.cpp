@@ -1,4 +1,4 @@
-#include "hll_magic.h"
+#include "hll_magic.hpp"
 
 namespace hll {
 

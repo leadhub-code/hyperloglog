@@ -3,8 +3,9 @@ from libc.stdlib cimport malloc, free
 from cpython cimport array
 from cython.operator cimport dereference as deref
 
-from hll cimport HLL as c_HLL
-from hll_serializer cimport HLLSerializer as c_HLLSerializer
+from hll cimport _HLL as c_HLL
+from hll_serializer cimport _HLLSerializer as c_HLLSerializer
+cimport hll_magic
 
 cdef class HLL:
     cdef c_HLL * _c_hll
