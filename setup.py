@@ -21,6 +21,5 @@ setup(
     author='Radovan Cerveny',
     author_email='songman@leadhub.co',
     packages=find_packages(exclude=['doc', 'tests']),
-    install_requires=[],
     ext_modules=cythonize(extensions, compiler_directives={'language_level' : "3"}),
     )
